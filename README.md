@@ -1,6 +1,6 @@
 # react-boilerplate
 
-A quick start boilerplate for web projects that will use React, Babel ES6/ES2015, JSX and Webpack
+A quick start boilerplate for web projects that uses React, Babel ES6/ES2015, JSX and Webpack
 
 ## Using this boilerplate
 
