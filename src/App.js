@@ -9,7 +9,13 @@ class App extends React.Component {
   }
 
   render() {
-    return <h1>This is a React Rheleana starter !</h1>
+    return (
+            <div>
+              <h1>This is a React Rheleana starter !</h1>
+              <h2> This is from model: {this.state.simpleText}</h2>
+              <button onClick={this.viewModel.changeSimpleText}>Update text</button>
+            </div>
+          )
   }
 }
 
