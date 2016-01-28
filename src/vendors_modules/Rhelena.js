@@ -20,16 +20,20 @@ export function  attachModelToView(modelInstance, viewInstance) {
 
 export class RhelenaViewModel {
   constructor(dataModelParam) {
-    this.dataModel = dataModelParam;
+    this._dataModel = dataModelParam;
     this.viewComponent = null;
+  }
+
+  set dataModel(newDataModel) {
+    this._dataModel = newDataModel;
+    this.viewComponent.setState(this._dataModel);
+  }
+
+  get dataModel() {
+    return this._dataModel;
   }
 
 }
 
 //get the initial Schema completed, even if the attributes of the objects are empty
 RhelenaViewModel.prototype.getDataModelSample = function() { return this.dataModel; }
-
-RhelenaViewModel.prototype.updateDataModel = function(newModel) {
-  this.dataModel = newModel;
-  this.viewComponent.setState(this.dataModel);
-}

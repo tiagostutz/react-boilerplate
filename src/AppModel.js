@@ -7,6 +7,6 @@ export default class AppModel extends RhelenaViewModel{
   }
 
   changeSimpleText() {
-    this.updateDataModel({simpleText : 'New text: ' + Math.random()})
+    this.dataModel = {simpleText : 'New text: ' + Math.random()};
   }
 }
