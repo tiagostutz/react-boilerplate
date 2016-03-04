@@ -1,11 +1,15 @@
-
+/**
+  * This function attaches a ViewModel instance to a ViewInstance
+  */
 export function  attachModelToView(modelInstance, viewInstance) {
   modelInstance.viewComponent = viewInstance;
-  viewInstance.state = modelInstance.dataModel;
+  viewInstance.state = modelInstance;
   viewInstance.viewModel = modelInstance;
 
-  //Now we bind all of the ViewModels methods to its context.
-  //http://reactkungfu.com/2015/07/why-and-how-to-bind-methods-in-your-react-component-classes/
+  /*
+   * Now we bind all of the ViewModels methods to its context.
+   * Reference: http://reactkungfu.com/2015/07/why-and-how-to-bind-methods-in-your-react-component-classes/
+   */
   var modelInstanceMethods = Object.getOwnPropertyNames( modelInstance.__proto__ );
   for (var i=0; i<modelInstanceMethods.length; i++) {
     var methodName = modelInstanceMethods[i];
@@ -18,22 +22,31 @@ export function  attachModelToView(modelInstance, viewInstance) {
   }
 }
 
+/**
+  * The
+  */
 export class RhelenaViewModel {
   constructor(dataModelParam) {
     this._dataModel = dataModelParam;
     this.viewComponent = null;
-  }
 
-  set dataModel(newDataModel) {
-    this._dataModel = newDataModel;
-    this.viewComponent.setState(this._dataModel);
-  }
+    var _self = this;
+    Object.keys(this._dataModel).forEach(function(propertyName) {
 
-  get dataModel() {
-    return this._dataModel;
+        Object.defineProperty(_self, propertyName, {
+            set:  function(newValue) {
+                    _self["_" + propertyName] = newValue;
+                    var objState = {};
+                    objState[propertyName] = this["_" + propertyName];
+                    _self.viewComponent.setState( objState );
+                  }
+            ,
+            get:  function() {
+              return _self["_" + propertyName];
+            }
+        });
+
+    });
   }
 
 }
-
-//get the initial Schema completed, even if the attributes of the objects are empty
-RhelenaViewModel.prototype.getDataModelSample = function() { return this.dataModel; }
