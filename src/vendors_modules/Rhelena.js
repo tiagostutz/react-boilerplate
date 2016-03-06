@@ -3,9 +3,9 @@
   */
 export function  attachModelToView(presentationModelInstance, viewInstance) {
     presentationModelInstance.viewComponent = viewInstance;
-    viewInstance.presentationModel = presentationModelInstance;
 
-    viewInstance.state = presentationModelInstance;
+    //initialize state
+    viewInstance.state = presentationModelInstance._dataModel;
     if (typeof(viewInstance.actions) === "undefined" || viewInstance.actions==null) {
         viewInstance.actions = {};
     }
