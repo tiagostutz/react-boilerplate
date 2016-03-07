@@ -4,13 +4,10 @@ export default class AppModel extends RhelenaPresentationModel{
 
 
     constructor() {
-        super(
-            {
-              simpleText : 'Simple text defined as Model!',
-              booksList : {},
-              searchText : ""
-            }
-         );
+        super();
+        this.simpleText = '0.000';
+        this.booksList = {};
+        this.searchText = "";
      }
 
      changeSimpleText() {

@@ -4,8 +4,30 @@
 export function  attachModelToView(presentationModelInstance, viewInstance) {
     presentationModelInstance.viewComponent = viewInstance;
 
+    if (viewInstance.state==null) {
+        viewInstance.state = {};
+    }
     //initialize state
-    viewInstance.state = presentationModelInstance._dataModel;
+    Object.getOwnPropertyNames(presentationModelInstance).forEach(function(propertyName) {
+
+        if (propertyName === "viewComponent")
+            return;
+
+        viewInstance.state[propertyName] = presentationModelInstance[propertyName];
+        Object.defineProperty(presentationModelInstance, propertyName, {
+            set:  function(newValue) {
+                    presentationModelInstance["_" + propertyName] = newValue;
+                    let objState = {};
+                    objState[propertyName] = this["_" + propertyName];
+                    presentationModelInstance.viewComponent.setState( objState );
+                  }
+            ,
+            get:  function() {
+              return presentationModelInstance["_" + propertyName];
+            }
+        });
+
+    });
     if (typeof(viewInstance.actions) === "undefined" || viewInstance.actions==null) {
         viewInstance.actions = {};
     }
@@ -34,27 +56,8 @@ export function  attachModelToView(presentationModelInstance, viewInstance) {
   * so that the State of the View React Component has the same properties as the ViewModel and
   */
 export class RhelenaPresentationModel {
-    constructor(dataModelParam) {
-        this._dataModel = dataModelParam;
+    constructor() {
         this.viewComponent = null;
-
-        let _self = this;
-        Object.keys(this._dataModel).forEach(function(propertyName) {
-
-            Object.defineProperty(_self, propertyName, {
-                set:  function(newValue) {
-                        _self["_" + propertyName] = newValue;
-                        let objState = {};
-                        objState[propertyName] = this["_" + propertyName];
-                        _self.viewComponent.setState( objState );
-                      }
-                ,
-                get:  function() {
-                  return _self["_" + propertyName];
-                }
-            });
-
-        });
       }
 
 }
